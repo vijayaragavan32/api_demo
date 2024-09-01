@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>hello world</p>
+    <input type="text" id="text"> 
+    <button onclick="adddata()">add</button>
+    <div id="container"></div>
+    <script>
+        const body = document.getElementById("container")
+        const text = document.getElementById("text")
+        
+        
+        try{
+            (async()=>{
+                const dbres = await fetch("http://localhost:3000/api/data")
+                const jsondata = await dbres.json()
+                for(let i=0;i<=jsondata.names.length-1;i++){
+                    const node = document.createElement("p")
+                    node.innerText=jsondata.names[i].name
+                    body.appendChild(node)
+                    //console.log(node)
+                }
+            })()
+            
+        }catch{
+            
+        }
+        
+        async function  adddata(){
+
+            try{
+                const dbres = await fetch("http://localhost:3000/api/data",{
+                    method:"POST",
+                    headers: {
+                        "Content-Type": "application/json", 
+                    },
+                    body: JSON.stringify({data:text.innerText})
+                })
+                const jsondata = await dbres.json()
+                if(jsondata.ststes){
+                   console.log(jsondata)
+                }
+            }catch(error){
+               console.log(error)
+            }
+        }
+        //document.getElementById("button").addeventlistener("click",()=>{
+            //adddata()
+          // console.log("clij")
+        //})
+    </script>
+</body>
+</html>
